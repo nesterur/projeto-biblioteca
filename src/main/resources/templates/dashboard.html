@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" type="iconesite/png" href="img/iconesite.png">
+</head>
+<body>
+    <div style="margin: 20px 0;">
+        <button id="btnCategorias" type="button">Categorias</button>
+        <form id="formCategorias" action="/buscar" method="GET" style="display: none; margin-top: 10px;">
+            <label><input type="checkbox" name="categoria" value="ficcao"> Ficção</label>
+            <label><input type="checkbox" name="categoria" value="romance"> Romance</label>
+            <label><input type="checkbox" name="categoria" value="aventura"> Aventura</label>
+            <label><input type="checkbox" name="categoria" value="misterio"> Mistério</label>
+            <label><input type="checkbox" name="categoria" value="fantasia"> Fantasia</label>
+            <label><input type="checkbox" name="categoria" value="biografia"> Biografia</label>
+            <label><input type="checkbox" name="categoria" value="autoajuda"> Autoajuda</label>
+            <label><input type="checkbox" name="categoria" value="historico"> Histórico</label>
+            <br>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <script>
+        const btnCategorias = document.getElementById('btnCategorias');
+        const formCategorias = document.getElementById('formCategorias');
+        btnCategorias.addEventListener('click', function() {
+            if (formCategorias.style.display === 'none') {
+                formCategorias.style.display = 'block';
+            } else {
+                formCategorias.style.display = 'none';
+            }
+        });
+    </script>
+    <div class='navbar'>
+        <div class='logo'>
+            <img src="img/iconesite.png" alt="Logo do Site">
+        </div>
+        <nav>
+            <ul class='nav-links'>
+                <li><a href="dashboard.html">Início</a></li>
+                <li><a href="meuslivros.html">Meus Livros</a></li>
+                <li><a href="login.html">Log Out</a></li>
+            </ul>
+        </nav>
+    </div>
+    <header class="header">
+        <div class="header-content">
+            <h1>Bem-vindo ao Acervo!!!</h1>
+        </div>
+        <form action="/livros" method="get">
+            <div class="search-bar">
+                <input placeholder="Pesquisar" type="text" name="busca">
+                <i class='bx bx-search'></i>
+                <button type="submit" class="btn">Buscar</button>
+            </div>
+        </form>
+        <div class="container">
+            <div th:each="livro : ${livros}" class="book-card">
+                <img th:src="${livro.urlCapa}" alt="Capa do Livro">
+                <h3 th:text="${livro.titulo}">Título do Livro</h3>
+                <p th:text="${livro.autor}">Autor</p>
+                <p th:text="${livro.categoria}">Categoria</p>
+            </div>
+        </div>
+        <div class="pagination" style="text-align:center; margin: 20px 0;">
+            <a th:if="${pagina > 1}" th:href="@{/livros(busca=${busca},pagina=${pagina-1},tamanho=${tamanho})}">Anterior</a>
+            <span style="margin: 0 10px;">
+                Página <span th:text="${pagina}"></span> de <span th:text="${totalPaginas}"></span>
+            </span>
+            <span th:each="i : ${#numbers.sequence(1, paginasExibir)}">
+                <a th:if="${i != pagina}" th:href="@{/livros(busca=${busca},pagina=${i},tamanho=${tamanho})}" th:text="${i}" style="margin: 0 2px;"></a>
+                <span th:if="${i == pagina}" th:text="${i}" style="font-weight:bold; margin: 0 2px;"></span>
+            </span>
+            <a th:if="${pagina < paginasExibir}" th:href="@{/livros(busca=${busca},pagina=${pagina+1},tamanho=${tamanho})}">Próxima</a>
+        </div>
+    </header>
+</body>
+</html>

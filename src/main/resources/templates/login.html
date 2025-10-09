@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Bibliotecassa - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/img/iconesite.png">
+</head>
+
+<body>
+    <main class="container">
+        <div>
+            <div class="login-container">
+                <h1>Bem-vindo!!<br> Faça o login para continuar:</h1>
+            </div>
+            
+            <!-- ✅ FORM CONECTADO AO SPRING BOOT -->
+            <form action="/login" method="POST">
+                <div class="input-box">
+                    <input name="identificador" placeholder="CPF ou ID do Funcionário" type="text" required>
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="input-box">
+                    <input name="senha" placeholder="Senha" type="password" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+
+                <div class="forgot-remember">
+                    <input type="checkbox" id="lembrar" name="lembrar">
+                    <label for="lembrar">Lembrar minha senha?</label>
+                    <a href="/esqueci-senha">Esqueci minha Senha</a>
+                </div>
+                
+                <!-- ✅ BOTÃO QUE ENVIA PARA O SERVIDOR -->
+                <button type="submit" class="login">Login</button>
+            </form>
+
+            <div class="cadastro">
+                <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a>!</p>
+            </div>
+            
+            <!-- MOSTRAR ERROS SE HOUVER -->
+            <div th:if="${erro}" class="erro">
+                <p th:text="${erro}"></p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

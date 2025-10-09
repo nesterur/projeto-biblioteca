@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Bibliotecassa - Cadastro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles-register.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/img/iconesite.png">
+</head>
+
+<body>
+    <main class="container">
+        <div>
+            <div class="register-container">
+                <h1>Crie sua conta!<br> Cadastre-se para continuar:</h1>
+            </div>
+            
+            <!-- ✅ FORM CONECTADO AO SPRING BOOT -->
+            <form action="/cadastro" method="POST">
+                <div class="input-box">
+                    <input name="nome" placeholder="Nome Completo" type="text" required>
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="input-box">
+                    <input name="cpf" placeholder="CPF" max="99999999999" min="00000000000" type="number" required>
+                    <i class='bx bx-id-card'></i>
+                </div>
+                <div class="input-box">
+                    <input name="email" placeholder="Email" type="email" required>
+                    <i class='bx bx-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input name="senha" placeholder="Senha" type="password" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+                <button type="submit" class="register">Registrar</button>
+            </form>
+
+            <div class="cadastro">
+                <p>Já tem uma conta? <a href="/login">Faça login</a>!</p>
+            </div>
+            
+            <!--mostrar erro-->
+            <div th:if="${erro}" class="erro">
+                <p th:text="${erro}"></p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
