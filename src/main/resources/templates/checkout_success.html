@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pedido confirmado</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="container checkout-success">
+    <!-- nota pagina de sucesso
+         resumo do pedido itens valores periodo instrucoes meus livros
+    -->
+    <h1>Aluguel confirmado</h1>
+    <p th:if="${orderId}">Pedido ID: <strong th:text="${orderId}"></strong></p>
+    <p th:if="${totalFormatado}">Total cobrado: <strong th:text="${totalFormatado}"></strong></p>
+    <!-- Show order-specific notice when order succeeded, otherwise display any existing message -->
+    <p th:if="${orderId}">Sua key aparecerá na aba "Meus Livros"</p>
+    <p th:if="${orderId} == null and ${message}" th:text="${message}"></p>
+
+    <div th:if="${orderItems}">
+        <h3>Itens do pedido</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Livro</th>
+                    <th>Preço</th>
+                    <th>Período (dias)</th>
+                    <th>Valor do aluguel</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${orderItems}">
+                    <td th:text="${item.nomeLivro}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.preco, 2, 'COMMA', 2, 'POINT')}"></td>
+                    <td th:text="${item.rentalDays}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.rentalPrice, 2, 'COMMA', 2, 'POINT')}"></td>
+                    <td th:text="${#temporals.format(item.rentalStart, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(item.rentalEnd, 'dd/MM/yyyy')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a th:href="@{/dashboard}">Voltar ao catálogo</a>
+</div>
+</body>
+</html>

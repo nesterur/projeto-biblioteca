@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Usuário - Admin</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main style="max-width:800px; margin:40px auto;">
+        <h2>Consultar Usuário por CPF (Admin)</h2>
+        <style>
+            /* Keep same readability rules as funcionario pages */
+            .header-content h1, h2, p, form, main > p { color: #fff; }
+            .result-box, .result-box * { color: inherit; }
+        </style>
+        <form th:action="@{/admin/consultar-usuario}" method="post" style="display:flex; gap:8px; margin-top:12px;">
+            <input name="cpf" placeholder="CPF do usuário" required />
+            <button class="btn" type="submit">Consultar</button>
+        </form>
+
+        <div th:if="${usuarioResult != null}" class="result-box" style="margin-top:20px; background:#fff; padding:16px; border-radius:8px; color:#000;">
+            <h3 th:text="${usuarioResult.nome}">Nome do Usuário</h3>
+            <p><strong>CPF:</strong> <span th:text="${usuarioResult.cpf}">99999999900</span></p>
+            <p><strong>Email:</strong> <span th:text="${usuarioResult.email}">lala@lala.lala</span></p>
+            <p><strong>Status:</strong> <span th:text="${usuarioResult.ativo ? 'Ativo' : 'Inativo'}">Informação adicional aqu</span></p>
+            <p><strong>Livros alugados:</strong> <span th:text="${totalAlugados}">0</span></p>
+            <p><strong>Pagamentos em dia:</strong>
+                <span th:text="${pagamentosEmDia} ? 'Sim' : 'Não'">Sim</span>
+            </p>
+        </div>
+    <div th:if="${usuarioResult == null}" style="margin-top:20px; color:#fff;">Nenhum usuário encontrado.</div>
+    </main>
+</body>
+</html>

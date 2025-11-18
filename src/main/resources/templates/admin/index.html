@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" type="iconesite/png" href="/img/iconesite.png">
+    <style>
+        /* Keep header text white, cards inherit their own colors */
+        .header-content h1, .header-content p, .header-content span { color: #fff; }
+        .card { background: #fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); width:260px; text-align:center; }
+        .card h3 { margin:8px 0 6px; }
+        .card p { color:#666; font-size:0.95em; }
+        .card-link { text-decoration:none; color:inherit; }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <header class="header">
+        <div class="header-content" style="text-align:center;">
+            <h1>Área do Administrador</h1>
+            <p>Olá, <span th:text="${session.nomeUsuario}"></span> — use as opções abaixo para gerenciar o sistema.</p>
+        </div>
+
+        <main style="max-width:1000px; margin:30px auto; display:flex; gap:18px; flex-wrap:wrap; justify-content:center;">
+            <a class="card-link" th:href="@{/admin/volume-alugueis}">
+                <div class="card">
+                    <i class='bx bx-bar-chart' style="font-size:36px;"></i>
+                    <h3>Volume de Aluguéis</h3>
+                    <p>Ver quantidade de aluguéis agrupada por título.</p>
+                </div>
+            </a>
+
+            <a class="card-link" th:href="@{/admin/consultar-usuario}">
+                <div class="card">
+                    <i class='bx bx-user' style="font-size:36px;"></i>
+                    <h3>Consultar Usuário</h3>
+                    <p>Pesquisar usuário por CPF.</p>
+                </div>
+            </a>
+
+            <a class="card-link" th:href="@{/admin/historico}">
+                <div class="card">
+                    <i class='bx bx-history' style="font-size:36px;"></i>
+                    <h3>Histórico</h3>
+                    <p>Ver histórico de empréstimos.</p>
+                </div>
+            </a>
+
+            <a class="card-link" th:href="@{/admin/manage-users}">
+                <div class="card">
+                    <i class='bx bx-users' style="font-size:36px;"></i>
+                    <h3>Gerenciar Usuários</h3>
+                    <p>Criar, remover e gerenciar entidades.</p>
+                </div>
+            </a>
+
+            <a class="card-link" th:href="@{/admin/manage-users} + '#interagir'">
+                <div class="card">
+                    <i class='bx bx-cog' style="font-size:36px;"></i>
+                    <h3>Interagir com Entidades</h3>
+                    <p>Bloquear ou criar Admins, Funcionários e Usuários.</p>
+                </div>
+            </a>
+
+            <a class="card-link" th:href="@{/logout}">
+                <div class="card">
+                    <i class='bx bx-log-out' style="font-size:36px;"></i>
+                    <h3>Logout</h3>
+                    <p>Encerrar sessão do administrador.</p>
+                </div>
+            </a>
+        </main>
+    </header>
+
+    <!-- flash messages -->
+    <div style="max-width:1000px; margin:18px auto;">
+        <div th:if="${sucessoAdmin != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${sucessoAdmin}">Administrador criado — login: 00001</span>
+        </div>
+        <div th:if="${sucessoFuncionario != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${sucessoFuncionario}">Funcionário criado — id: 0001</span>
+        </div>
+        <div th:if="${mensagemSucesso != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemSucesso}">Operação bem sucedida</span>
+        </div>
+        <div th:if="${mensagemErro != null}" style="background:#a00; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemErro}">Erro na operação</span>
+        </div>
+    </div>
+
+    <main style="max-width:1000px; margin:0 auto; padding:18px;">
+        <section style="margin-top:12px; text-align:center;">
+            <p>As ferramentas de criação, exclusão e bloqueio de entidades foram movidas para a página de gerenciamento. Use o botão abaixo para acessar os livros disponíveis no estoque e gerenciar bloqueios.</p>
+            <a class="btn" th:href="@{/admin/books}" style="background:#fff; color:#000; padding:12px 18px; border-radius:8px; text-decoration:none;">Livros no Estoque</a>
+        </section>
+    </main>
+</body>
+</html>

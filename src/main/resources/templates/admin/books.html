@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Livros</title>
+    <link rel="stylesheet" th:href="@{/css/styles-dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/books-admin.css}" />
+</head>
+<body class="admin-books">
+<div class="container books-page">
+    <h1>Gerenciar Livros</h1>
+
+    <div th:if="${mensagemErro}" class="alert alert-danger" th:text="${mensagemErro}"></div>
+    <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+
+    <form method="get" action="#" th:action="@{/admin/books}">
+        <input type="text" name="q" placeholder="Pesquisar livros" th:value="${query}" />
+        <button type="submit">Pesquisar</button>
+        <a th:href="@{/admin/books?view=blocked}">Ver apenas bloqueados</a>
+        <a th:href="@{/admin/manage-users}">Voltar</a>
+    </form>
+
+    <table class="result-table books-table">
+        <thead>
+        <tr>
+            <th>Capa</th>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td>
+                <img class="book-cover" th:src="${book.cover != null ? book.cover : '/img/placeholder.png'}" th:alt="${book.title != null ? book.title : book.get('title')}" />
+            </td>
+            <td th:text="${book.id != null ? book.id : book.get('id')}"></td>
+            <td>
+                <div class="book-meta">
+                    <span class="book-title" th:text="${book.title != null ? book.title : book.get('title')}"></span>
+                    <span class="book-author" th:text="${book.author != null ? book.author : ''}"></span>
+                </div>
+            </td>
+            <td>
+                <div class="book-actions">
+                <form th:if="${blockedIds.contains(book.id != null ? book.id : book.get('id')) == false}" th:action="@{/admin/books/block}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id != null ? book.id : book.get('id')}" />
+                    <button class="block" type="submit">Bloquear</button>
+                </form>
+                <form th:if="${blockedIds.contains(book.id != null ? book.id : book.get('id'))}" th:action="@{/admin/books/unblock}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id != null ? book.id : book.get('id')}" />
+                    <button class="unblock" type="submit">Reativar</button>
+                </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

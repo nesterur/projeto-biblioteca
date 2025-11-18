@@ -8,14 +8,9 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-        url('/img/pexels-pixabay-159711.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    background-attachment: fixed;
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/img/pexels-pixabay-159711.jpg') center/cover no-repeat;
     min-height: 100vh;
+    background-attachment: fixed;
 }
 .container {
     display: block;
@@ -120,4 +115,14 @@ body {
     border-radius: 5px;
     margin-top: 15px;
     text-align: center;
+}
+
+.book-card {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    margin: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 0.5);
+    
 }

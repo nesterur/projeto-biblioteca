@@ -1,0 +1,79 @@
+/* Meus Livros — page-specific styles (follow dashboard look) */
+
+/* Base page (match dashboard background and base text color) */
+body {
+  background: #221a23;
+  color: #eaeaea;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.meuslivros-container {
+  width: 880px;
+  max-width: calc(100% - 40px);
+  margin: 40px auto;
+  padding: 28px 24px;
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.35);
+}
+.meuslivros-container h1 { font-size: 38px; color: #fff; margin: 0 0 8px 0; }
+.meuslivros-container h2 { color: #ddd; margin: 0 0 10px 0; }
+
+.meuslivros-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  padding: 12px;
+}
+
+/* each item as a card in a 4-column grid */
+.meuslivro-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  min-height: 220px;
+}
+.meuslivro-row img,
+.meuslivro-capa {
+  width: 140px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.meuslivro-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #222;
+  text-align: center;
+}
+.meuslivro-meta .titulo { font-weight: 700; color: #8107d8; }
+.meuslivro-meta .meta-row { font-size: 0.95em; color: #444; }
+.meuslivro-actions { margin-top: 8px; }
+.meuslivro-expired {
+  opacity: 0.65;
+  filter: grayscale(30%);
+}
+
+@media (max-width: 1100px) {
+  .meuslivros-list { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .meuslivros-list { grid-template-columns: repeat(2, 1fr); }
+  .meuslivros-container { max-width: calc(100% - 24px); margin: 24px; }
+}
+
+@media (max-width: 600px) {
+  .meuslivros-list { grid-template-columns: 1fr; gap: 12px; }
+  .navbar-center { position: static; transform: none; }
+  .nav-links { display: none; }
+}

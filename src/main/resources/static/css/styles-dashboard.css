@@ -1,16 +1,249 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* base box sizing */
+* { box-sizing: border-box; }
 
-.poppins-thin {
-  font-family: "Poppins", sans-serif;
-  font-weight: 100;
-  font-style: normal;
+/* Base page */
+body {
+  background: #221a23;
+  color: #222;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.container{
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; /* needed for centering .navbar-center */
+  background: #8107d8;
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(129,7,216,0.07);
+}
+.logo img { height: 44px; display:block; }
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.site-title { color: #fff; font-weight: 600; font-size: 1.15em; }
+.cart-link { margin-right: 20px; display: inline-flex; align-items: center; text-decoration: none; }
+.cart-link i { color: #fff; font-size: 1.6em; }
+.nav-links { list-style: none; margin: 0; padding: 0; display:flex; gap:20px; align-items:center; }
+.nav-links a { color: #fff; text-decoration:none; font-weight:500; }
+.nav-links a.btn-meuslivros { background:#fff; color:#8107d8; padding:6px 12px; border-radius:8px; font-weight:600; }
+
+/* Site title link: make it look like the Meus Livros white contour/button */
+.site-title-link {
+  background: #fff;
+  color: #8107d8;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.site-title-link:hover {
+  box-shadow: 0 4px 12px rgba(129,7,216,0.12);
+}
+
+/* categorias button (compact) */
+/* categorias button removed - reverted to original design */
+
+/* Header and search bar */
+.header {
+  background: #221a23;
+  padding: 32px 0 16px 0;
+  box-shadow: 0 2px 8px rgba(8,84,191,0.04);
+  margin-bottom: 24px;
+}
+.header-content h1 { color: #8107d8; font-size: 2.2em; margin: 0 0 8px 0; }
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  max-width: 480px;
+  background: #e4d4d4;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 1px 4px rgba(129,7,216,0.04);
+}
+.search-bar input[type="text"] { flex:1; border: none; background: transparent; font-size:1.05em; color:#222; outline:none; padding:6px 4px; }
+.search-bar i { color:#444; font-size:1.2em; }
+.search-bar .btn { background: #8107d8; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 1em; cursor: pointer; }
+
+/* Main books grid (dashboard) */
+.container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin: 50px auto;
-  width: 90%;
-  background-color: transparent;
+  grid-auto-rows: 1fr;
+  gap: 32px;
+  padding: 32px 0;
+  max-width: 900px;
+  margin: 0 auto;
+  align-items: stretch;
+  justify-items: center;
 }
+.book-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 14px 10px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: box-shadow 220ms ease, transform 220ms ease;
+  height: 100%;
+  width: 100%;
+  max-width: 220px;
+}
+.book-card img { width: 190px; height: 290px; object-fit: cover; border-radius: 12px; margin-bottom:10px; }
+.book-card h3 { color: #8107d8; font-size: 1.05em; margin: 0 0 4px 0; text-align:center; }
+.book-card p { color:#444; margin: 2px 0; text-align:center; }
+.book-card:hover { box-shadow: 0 6px 24px rgba(119, 0, 255, 0.12); transform: translateY(-4px); }
+.btn-carrinho { background: #8107d8; color: #fff; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 1em; box-shadow: 0 1px 4px rgba(129,7,216,0.08); }
+.add-carrinho-form { position: absolute; top: 10px; right: 10px; }
+/* end of dashboard rules */
+
+/* Categories panel - placed to the right of the search bar */
+.categories-panel {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  padding: 6px 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(129,7,216,0.08);
+}
+.categories-panel select {
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  font-weight: 600;
+  color: #4a1a68; /* deep purple tone */
+  outline: none;
+  cursor: pointer;
+  min-width: 160px; /* ensure the select shows the label instead of collapsing to a small dot */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.categories-panel { position: relative; }
+.categories-panel::after {
+  /* small caret on the right of the select to indicate dropdown */
+  content: '\25BE';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4a1a68;
+  pointer-events: none;
+}
+.categories-panel select option { color: #222; font-weight: 500; }
+
+@media (max-width: 760px) {
+  .search-bar { max-width: 360px; }
+  .categories-panel { margin-right: 8px; }
+}
+
+/* Empty state message shown when no search has been made */
+.empty-state {
+  max-width: 720px;
+  margin: 18px auto 8px auto;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: transparent; /* don't create a white square inside rounded header */
+  color: #cfcfcf;
+  text-align: center;
+  font-size: 1.05em;
+}
+.empty-state p { margin:0; }
+
+/* Pagination styling to match Meus Livros tone */
+.pagination {
+  text-align: center;
+  margin: 24px 0;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+}
+.pagination a {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 6px 10px;
+  color: #6a00c9; /* purple link color */
+  text-decoration: none;
+  background: transparent;
+  border-radius: 8px;
+}
+.pagination a:hover {
+  background: rgba(106,0,201,0.08);
+  box-shadow: 0 4px 12px rgba(106,0,201,0.06);
+}
+.pagination span[th\:if] {
+  /* placeholder for template-expressed current page; ensure it appears as text */
+}
+.pagination span[style] {
+  /* fallback rule */
+}
+.pagination span[th\:if="${i == pagina}"] , .pagination .current-page {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 6px 10px;
+  background: #8107d8; /* strong purple */
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* make previous/next links slightly subdued */
+.pagination a[th\:if="${pagina > 1}"], .pagination a[th\:if="${pagina < paginasExibir}"] {
+  color: #4a1a68;
+}
+
+/* Safety: if a template accidentally includes the navbar fragment more than once,
+   show only the first one to avoid the page appearing duplicated visually. */
+.navbar:not(:first-of-type) {
+  display: none !important;
+}
+
+/* Admin manage users specific styles */
+.result-table {
+  border-collapse: collapse;
+}
+.result-table thead tr th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  color: #222;
+  font-weight: 700;
+}
+.result-table tbody td {
+  padding: 10px 12px;
+  border-top: 1px solid #eee;
+}
+.result-table button {
+  background: #8107d8;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.result-table form { margin: 0; }
+
+/* small responsive adjustments for manage-users forms */
+@media (max-width: 900px) {
+  .result-table thead { display: none; }
+  .result-table, .result-table tbody, .result-table tr, .result-table td { display: block; width: 100%; }
+  .result-table tr { margin-bottom: 12px; }
+  .result-table td { padding-left: 50%; position: relative; }
+  .result-table td::before { position: absolute; left: 12px; width: 45%; white-space: nowrap; content: attr(data-label); font-weight:700; color:#444; }
+}
+

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Gerenciar Usuários</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main style="max-width:1000px; margin:40px auto; color:#fff;">
+        <h2>Gerenciar Usuários</h2>
+
+        <!-- Top quick-action cards removed: we are already inside a card (Interagir) so top cards were redundant -->
+
+        <!-- Interagir com Entidades (mantido) -->
+        <section id="interagir" style="margin-top:18px; display:flex; justify-content:center;">
+            <div class="card" style="width:640px;">
+                <i class='bx bx-cog' style="font-size:36px;"></i>
+                <h3>Interagir com Entidades</h3>
+                <p>Use este painel para criar ou bloquear Admins, Funcionários e Usuários.</p>
+
+                <form id="entity-form" th:action="@{/admin/block-entity}" method="post" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+                    <label>
+                        Tipo de Entidade:
+                        <select name="entityType" id="entityType">
+                            <option value="ADMIN">Administrador</option>
+                            <option value="FUNCIONARIO">Funcionário</option>
+                            <option value="USUARIO">Usuário</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Ação:
+                        <select name="actionType" id="actionType">
+                            <option value="BLOCK">Bloquear</option>
+                            <option value="CREATE">Criar</option>
+                        </select>
+                    </label>
+
+                    <div id="field-identifier">
+                        <input name="identifier" id="identifier" placeholder="Login/Admin ID ou CPF (para usuário)" />
+                    </div>
+
+                    <div id="create-fields" style="display:none;">
+                        <input name="nome" id="nome" placeholder="Nome completo" />
+                        <input name="email" id="email" placeholder="Email" />
+                        <input name="senha" id="senha" placeholder="Senha" type="password" />
+                        <input name="cpf" id="cpf" placeholder="CPF (somente para Usuário)" style="display:none;" />
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="btn-carrinho">Executar</button>
+                        <button type="button" id="preview-btn" class="btn-carrinho" style="background:#666;">Preview</button>
+                    </div>
+                </form>
+                <script>
+                    const actionSelect = document.getElementById('actionType');
+                    const entitySelect = document.getElementById('entityType');
+                    const createFields = document.getElementById('create-fields');
+                    const cpfField = document.getElementById('cpf');
+                    const form = document.getElementById('entity-form');
+
+                    function updateFormActionAndFields() {
+                        const action = actionSelect.value;
+                        const entity = entitySelect.value;
+                        if (action === 'CREATE') {
+                            createFields.style.display = 'flex';
+                            createFields.style.flexDirection = 'column';
+                            if (entity === 'ADMIN') {
+                                form.action = '/admin/create';
+                                cpfField.style.display = 'none';
+                            } else if (entity === 'FUNCIONARIO') {
+                                form.action = '/admin/create-funcionario';
+                                cpfField.style.display = 'none';
+                            } else if (entity === 'USUARIO') {
+                                form.action = '/admin/manage-users/create';
+                                cpfField.style.display = 'block';
+                            } else {
+                                form.action = '/admin/manage-users/create';
+                                cpfField.style.display = 'none';
+                            }
+                        } else {
+                            createFields.style.display = 'none';
+                            cpfField.style.display = 'none';
+                            form.action = '/admin/block-entity';
+                        }
+                    }
+
+                    actionSelect.addEventListener('change', updateFormActionAndFields);
+                    entitySelect.addEventListener('change', updateFormActionAndFields);
+
+                    document.getElementById('preview-btn').addEventListener('click', () => {
+                        alert('Preview: Ação=' + actionSelect.value + '\nTipo=' + entitySelect.value + '\nIdentificador=' + document.getElementById('identifier').value + '\nNome=' + document.getElementById('nome').value + '\nEmail=' + document.getElementById('email').value + '\nCPF=' + document.getElementById('cpf').value);
+                    });
+
+                    updateFormActionAndFields();
+                </script>
+            </div>
+        </section>
+
+        <div th:if="${mensagemSucesso != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemSucesso}">Operação bem sucedida</span>
+        </div>
+        <div th:if="${mensagemErro != null}" style="background:#a00; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemErro}">Erro na operação</span>
+        </div>
+
+        <!-- Tabelas de entidades -->
+        <section style="margin-top:24px; display:flex; flex-direction:column; gap:20px;">
+            <!-- Administradores -->
+            <div>
+                <h4>Administradores</h4>
+                <table class="result-table" style="width:100%">
+                    <thead>
+                        <tr><th>Login</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="admin : ${admins}">
+                            <td data-label="Login" th:text="${admin.loginAdmin}">admin1</td>
+                            <td data-label="Nome" th:text="${admin.nome}">Nome Admin</td>
+                            <td data-label="Email" th:text="${admin.email}">email@ex.com</td>
+                            <td data-label="Ações">
+                                <form th:action="@{/admin/delete}" method="post" style="display:inline">
+                                    <input type="hidden" name="loginAdmin" th:value="${admin.loginAdmin}" />
+                                    <button type="submit" class="btn-carrinho">Deletar</button>
+                                </form>
+                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="ADMIN" />
+                                    <input type="hidden" name="identifier" th:value="${admin.loginAdmin}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
+                                </form>
+                                <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="ADMIN" />
+                                    <input type="hidden" name="identifier" th:value="${admin.loginAdmin}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Funcionários -->
+            <div>
+                <h4>Funcionários</h4>
+                <table class="result-table" style="width:100%">
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="func : ${funcionarios}">
+                            <td data-label="ID" th:text="${func.identificadorLogin}">f123</td>
+                            <td data-label="Nome" th:text="${func.nome}">Nome Func</td>
+                            <td data-label="Email" th:text="${func.email}">email@ex.com</td>
+                            <td data-label="Ações">
+                                <form th:action="@{/admin/delete-funcionario}" method="post" style="display:inline">
+                                    <input type="hidden" name="idFuncionario" th:value="${func.identificadorLogin}" />
+                                    <button type="submit" class="btn-carrinho">Deletar</button>
+                                </form>
+                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="FUNCIONARIO" />
+                                    <input type="hidden" name="identifier" th:value="${func.identificadorLogin}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
+                                </form>
+                                <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="FUNCIONARIO" />
+                                    <input type="hidden" name="identifier" th:value="${func.identificadorLogin}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Usuários comuns -->
+            <div>
+                <h4>Usuários</h4>
+                <table class="result-table" style="width:100%">
+                    <thead>
+                        <tr><th>CPF</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users}">
+                            <td data-label="CPF" th:text="${u.cpf}">00000000000</td>
+                            <td data-label="Nome" th:text="${u.nome}">Nome Usuário</td>
+                            <td data-label="Email" th:text="${u.email}">email@ex.com</td>
+                            <td data-label="Ações">
+                                <form th:action="@{/admin/manage-users/delete}" method="post" style="display:inline">
+                                    <input type="hidden" name="cpf" th:value="${u.cpf}" />
+                                    <button type="submit" class="btn-carrinho">Deletar</button>
+                                </form>
+                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="USUARIO" />
+                                    <input type="hidden" name="identifier" th:value="${u.cpf}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
+                                </form>
+                                    <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                        <input type="hidden" name="entityType" value="USUARIO" />
+                                        <input type="hidden" name="identifier" th:value="${u.cpf}" />
+                                        <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
+                                    </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

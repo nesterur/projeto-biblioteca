@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Empréstimos - Funcionário</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+    <style>
+        /* Ensure plain texts on pagina funcionario are white, but table content remains dark for readability */
+        main > h2, main > p { color: #fff; }
+        .result-table { width:100%; border-collapse:collapse; background:#fff; color:#000; }
+        .result-table th, .result-table td { padding:8px; border-bottom:1px solid #eee; text-align:left; }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main style="max-width:1000px; margin:40px auto;">
+        <h2>Histórico de Empréstimos</h2>
+        <p>(filtre por CPF ou ID do livro usando os parâmetros `usuarioCpf` ou `livroId` na query string)</p>
+
+        <div th:if="${historyRows != null && #lists.size(historyRows) > 0}">
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Livro</th>
+                        <th>Data Empréstimo</th>
+                        <th>Quantidade</th>
+                        <th>Período (dias)</th>
+                        <th>CPF</th>
+                        <th>Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="row,stat : ${historyRows}">
+                        <td th:text="${stat.index + 1}">1</td>
+                        <td th:text="${row.titulo}">Naruto</td>
+                        <td th:text="${row.data}">16/12/2025</td>
+                        <td th:text="${row.quantidade}">1</td>
+                        <td th:text="${row.dias}">7</td>
+                        <td th:text="${row.usuarioCpf}">99999999900</td>
+                        <td th:text="${row.usuario}">Evelyn</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${historyRows == null or #lists.isEmpty(historyRows)}" style="color:#fff; margin-top:12px;">Nenhum histórico encontrado.</div>
+    </main>
+</body>
+</html>

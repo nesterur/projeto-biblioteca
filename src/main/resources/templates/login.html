@@ -14,10 +14,14 @@
     <main class="container">
         <div>
             <div class="login-container">
-                <h1>Bem-vindo!!<br> Faça o login para continuar:</h1>
+                <h1>Bem-vindo!<br> Faça o login para continuar:</h1>
             </div>
-            
-            <!-- ✅ FORM CONECTADO AO SPRING BOOT -->
+
+            <div th:if="${param.logout}" class="mensagem-sucesso" style="margin-bottom:12px;">
+                <p>Você saiu com sucesso</p>
+            </div>
+
+            <!-- FORM CONECTADO AO SPRING BOOT -->
             <form action="/login" method="POST">
                 <div class="input-box">
                     <input name="identificador" placeholder="CPF ou ID do Funcionário" type="text" required>
@@ -34,7 +38,6 @@
                     <a href="/esqueci-senha">Esqueci minha Senha</a>
                 </div>
                 
-                <!-- ✅ BOTÃO QUE ENVIA PARA O SERVIDOR -->
                 <button type="submit" class="login">Login</button>
             </form>
 

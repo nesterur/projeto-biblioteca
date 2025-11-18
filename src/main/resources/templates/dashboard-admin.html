@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/css/styles-dashboard.css">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main style="max-width:1000px; margin:40px auto; color:#fff;">
+        <h2>Dashboard - Administrador</h2>
+
+        <div th:if="${sucessoAdmin != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${sucessoAdmin}">Administrador criado — login: 00001</span>
+        </div>
+        <div th:if="${sucessoFuncionario != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${sucessoFuncionario}">Funcionário criado — id: 0001</span>
+        </div>
+        <div th:if="${mensagemSucesso != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemSucesso}">Operação bem sucedida</span>
+        </div>
+        <div th:if="${mensagemErro != null}" style="background:#a00; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
+            <span th:text="${mensagemErro}">Erro na operação</span>
+        </div>
+
+        <section style="background:#222; padding:12px; margin:12px 0; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h3>Ações de Administrador</h3>
+                <p>Use a página dedicada para gerenciar entidades (usuários, administradores e funcionários).</p>
+            </div>
+            <div>
+                <a class="btn" th:href="@{/admin/manage-users}" style="background:#fff; color:#000; padding:12px 16px; border-radius:8px; text-decoration:none;">Ir para Gerenciar Usuários</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,19 +1,26 @@
+/* ANOTAÇÕES - ModelUsuarios.java
+ * O QUE: Classe base/abstrata para tipos de usuário (comum, funcionário, admin).
+ * POR QUE: define contrato/atributos comuns a todos os usuários.
+ * ENTRADAS: propriedades compartilhadas (id, nome, email, etc.).
+ * SAÍDAS: subclasses que estendem o comportamento base.
+ * NOTAS: manter métodos abstratos documentados para implementações.
+ */
 package com.bibliotecassa.trabalho.Services.Usuarios;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
-// Classe base para todos os tipos de usuários
+// classe base pra todo mundo que é usuario
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // Cada subclasse vira uma tabela
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // cada subclasse vira uma tabela
 public abstract class ModelUsuarios {
-    // Chave primária auto-incrementada
+    // id do usuario
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // Dados comuns a todos os usuários
+    // dados comuns de usuario
     @Column(nullable = false, length = 100)
     protected String nome;
 
@@ -30,10 +37,10 @@ public abstract class ModelUsuarios {
     @Column(nullable = false)
     protected boolean ativo;
 
-    // Construtor vazio exigido pelo JPA
+    // construtor vazio pro jpa
     public ModelUsuarios() {}
 
-    // Construtor para uso na aplicação
+    // construtor pra usar no codigo
     public ModelUsuarios(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;
@@ -42,7 +49,7 @@ public abstract class ModelUsuarios {
         this.ativo = true;
     }
 
-    // Getters e setters
+    // getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getNome() { return nome; }
@@ -55,7 +62,7 @@ public abstract class ModelUsuarios {
     public boolean isAtivo() { return ativo; }
     public void setAtivo(boolean ativo) { this.ativo = ativo; }
 
-    // Métodos abstratos para especialização nas subclasses
+    // metodos que cada tipo de usuario tem que implementar
     public abstract String getTipoUsuario();
     public abstract String getIdentificadorLogin();
 }

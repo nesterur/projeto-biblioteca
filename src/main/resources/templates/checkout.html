@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Checkout - Aluguel</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="../static/css/styles.css" />
+</head>
+<body>
+<div class="container">
+    <!-- nota pagina checkout
+         mostrar itens periodo pagamento
+         usuario escolhe periodo e confirma
+    -->
+    <h1>Finalizar aluguel</h1>
+
+    <div>
+        <h3>Itens</h3>
+        <ul>
+            <li th:each="it : ${itens}">
+                <span th:text="${it.nomeLivro}"></span> -
+                <span th:text="${#numbers.formatDecimal(it.preco, 2, 'COMMA', 2, 'POINT')}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <form th:action="@{/checkout/process}" method="post">
+        <input type="hidden" name="idUsuario" th:value="${idUsuario}" />
+
+        <div>
+            <h3>Período de aluguel</h3>
+            <label><input type="radio" name="rentalDays" value="7" checked/> 7 dias (10% do preço)</label><br/>
+            <label><input type="radio" name="rentalDays" value="14"/> 14 dias (18% do preço)</label><br/>
+            <label><input type="radio" name="rentalDays" value="30"/> 30 dias (30% do preço)</label>
+        </div>
+
+        <div>
+            <h3>Método de pagamento</h3>
+            <label><input type="radio" name="metodoPagamento" value="CARD" checked/> Cartão</label><br/>
+            <label><input type="radio" name="metodoPagamento" value="PIX"/> PIX</label>
+        </div>
+
+        <div style="margin-top:1rem;">
+              <button type="submit" class="login confirmar-aluguel">Confirmar aluguel</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

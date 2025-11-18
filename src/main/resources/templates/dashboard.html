@@ -9,68 +9,66 @@
     <link rel="icon" type="iconesite/png" href="img/iconesite.png">
 </head>
 <body>
-    <div style="margin: 20px 0;">
-        <button id="btnCategorias" type="button">Categorias</button>
-        <form id="formCategorias" action="/buscar" method="GET" style="display: none; margin-top: 10px;">
-            <label><input type="checkbox" name="categoria" value="ficcao"> Ficção</label>
-            <label><input type="checkbox" name="categoria" value="romance"> Romance</label>
-            <label><input type="checkbox" name="categoria" value="aventura"> Aventura</label>
-            <label><input type="checkbox" name="categoria" value="misterio"> Mistério</label>
-            <label><input type="checkbox" name="categoria" value="fantasia"> Fantasia</label>
-            <label><input type="checkbox" name="categoria" value="biografia"> Biografia</label>
-            <label><input type="checkbox" name="categoria" value="autoajuda"> Autoajuda</label>
-            <label><input type="checkbox" name="categoria" value="historico"> Histórico</label>
-            <br>
-            <button type="submit">Filtrar</button>
-        </form>
-    </div>
 
-    <script>
-        const btnCategorias = document.getElementById('btnCategorias');
-        const formCategorias = document.getElementById('formCategorias');
-        btnCategorias.addEventListener('click', function() {
-            if (formCategorias.style.display === 'none') {
-                formCategorias.style.display = 'block';
-            } else {
-                formCategorias.style.display = 'none';
-            }
-        });
-    </script>
-    <div class='navbar'>
-        <div class='logo'>
-            <img src="img/iconesite.png" alt="Logo do Site">
-        </div>
-        <nav>
-            <ul class='nav-links'>
-                <li><a href="dashboard.html">Início</a></li>
-                <li><a href="meuslivros.html">Meus Livros</a></li>
-                <li><a href="login.html">Log Out</a></li>
-            </ul>
-        </nav>
-    </div>
+    <!-- small script removed: use the centralized script at the end of the file to manage Categorias -->
+    <div th:replace="fragments/navbar :: navbar"></div>
     <header class="header">
-        <div class="header-content">
-            <h1>Bem-vindo ao Acervo!!!</h1>
+        <div class="header-content" style="text-align:center;">
+            <h1 style="margin-bottom: 0.2em;">Bem-vindo ao Acervo,  <span th:text="${session.nomeUsuario}"></span>!</h1>
+            <p style="font-size:1.2em; color:#0854bf; margin-top:0;">Faça sua pesquisa:</p>
+            <p th:if="${session.nomeUsuario == null and session.idUsuario != null}" style="margin:6px 0 0 0; color:#fff; font-weight:600;">Olá, <span th:text="${session.idUsuario}"></span></p>
         </div>
-        <form action="/livros" method="get">
-            <div class="search-bar">
-                <input placeholder="Pesquisar" type="text" name="busca">
-                <i class='bx bx-search'></i>
-                <button type="submit" class="btn">Buscar</button>
-            </div>
-        </form>
-        <div class="container">
-            <div th:each="livro : ${livros}" class="book-card">
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; width:100%;">
+            <form action="/livros" method="get" style="flex:1; max-width:720px;">
+                <div class="search-bar" style="display:flex; align-items:center;">
+                    <input placeholder="Pesquisar" type="text" name="busca" th:value="${busca}" />
+                    <input type="hidden" name="tamanho" th:value="${tamanho != null ? tamanho : 12}" value="12" />
+                    <i class='bx bx-search'></i>
+                    <button type="submit" class="btn">Buscar</button>
+                </div>
+            </form>
+
+            <!-- Categories panel: placed to the right of the search bar, outside the search form -->
+            <form th:if="${genres != null}" action="/livros" method="get" class="categories-panel" style="margin-right:24px;">
+                <input type="hidden" name="busca" th:value="${busca}" />
+                <input type="hidden" name="tamanho" th:value="${tamanho != null ? tamanho : 12}" />
+                <select name="genero" th:if="${genres != null}" th:onchange="this.form.submit()">
+                    <option value="" th:selected="${selectedGenre == null}">Todas Categorias</option>
+                    <option th:each="g : ${genres}" th:value="${g}" th:text="${g}" th:selected="${g.equals(selectedGenre)}"></option>
+                </select>
+            </form>
+        </div>
+        <!-- Empty state: shown when there are no search results -->
+        <div th:if="${#lists.isEmpty(livros)}" class="empty-state">
+            <p>Você ainda não fez nenhuma pesquisa. Tente palavras-chave do seu livro favorito!</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(livros)}" class="container">
+            <!-- nota pagina dashboard
+             mostra livros resultados de busca permitir adicionar ao carrinho
+            -->
+            <div th:each="livro : ${livros}" class="book-card book-hover">
                 <img th:src="${livro.urlCapa}" alt="Capa do Livro">
                 <h3 th:text="${livro.titulo}">Título do Livro</h3>
                 <p th:text="${livro.autor}">Autor</p>
                 <p th:text="${livro.categoria}">Categoria</p>
+                <p class="book-price" th:text="${livro.precoFormatado}">R$ 49,99</p>
+                <form th:action="@{/carrinho/adicionar}" method="post" class="add-carrinho-form" th:object="${livro}" style="position:absolute; top:10px; right:10px; z-index:2;">
+                    <input type="hidden" name="idLivro" th:value="${livro.idLivro}" />
+                    <input type="hidden" name="idUsuario" th:value="${idUsuario}" />
+                    <input type="hidden" name="busca" th:value="${busca}" />
+                    <input type="hidden" name="pagina" th:value="${pagina}" />
+                    <input type="hidden" name="tamanho" th:value="${tamanho != null ? tamanho : 12}" value="12" />
+                    <button type="submit" class="btn-carrinho" title="Adicionar ao carrinho">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </form>
             </div>
         </div>
-        <div class="pagination" style="text-align:center; margin: 20px 0;">
+        <div th:if="${paginasExibir != null and paginasExibir > 0}" class="pagination" style="text-align:center; margin: 20px 0;">
             <a th:if="${pagina > 1}" th:href="@{/livros(busca=${busca},pagina=${pagina-1},tamanho=${tamanho})}">Anterior</a>
             <span style="margin: 0 10px;">
-                Página <span th:text="${pagina}"></span> de <span th:text="${totalPaginas}"></span>
+                <span th:text="${pagina}"></span> de <span th:text="${totalPaginasDisplay}"></span>
             </span>
             <span th:each="i : ${#numbers.sequence(1, paginasExibir)}">
                 <a th:if="${i != pagina}" th:href="@{/livros(busca=${busca},pagina=${i},tamanho=${tamanho})}" th:text="${i}" style="margin: 0 2px;"></a>
@@ -79,5 +77,40 @@
             <a th:if="${pagina < paginasExibir}" th:href="@{/livros(busca=${busca},pagina=${pagina+1},tamanho=${tamanho})}">Próxima</a>
         </div>
     </header>
+<script>
+// Torna o submit do formulário de adicionar ao carrinho assíncrono (AJAX)
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.add-carrinho-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(async response => {
+                if (response.ok) {
+                    // Opcional: feedback visual
+                    const btn = form.querySelector('.btn-carrinho');
+                    if (btn) {
+                        const icon = btn.querySelector('i');
+                        if (icon) btn.textContent = 'Adicionado com Sucesso!';
+                        else btn.textContent = 'Adicionado com Sucesso!';
+                        setTimeout(() => {
+                            if (icon) btn.innerHTML = '<i class="bx bx-plus"></i>';
+                            else btn.textContent = 'Adicionar ao Carrinho';
+                        }, 1200);
+                    }
+                } else {
+                    let text = '';
+                    try { text = await response.text(); } catch (e) { /* ignore */ }
+                    alert('Erro ao adicionar ao carrinho: ' + (text || response.statusText));
+                }
+            })
+            .catch((err) => alert('Erro ao adicionar ao carrinho: ' + err.message));
+        });
+    });
+});
+</script>
 </body>
 </html>
