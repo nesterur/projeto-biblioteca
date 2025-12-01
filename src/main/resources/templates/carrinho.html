@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -22,23 +22,21 @@
 </div>
 
 <main style="padding: 28px; max-width: 920px; margin: 0 auto;">
-    <!-- nota pagina carrinho
-         mostra itens adicionados permite remover e prosseguir para checkout
-    -->
+    
     <h2 style="color: #fff; margin-bottom: 18px;">Seu Carrinho</h2>
 
     <div th:if="${#lists.isEmpty(itens)}" style="color:#ddd;">Seu carrinho está vazio.</div>
 
     <div class="cart-container">
         <div th:each="item : ${itens}" class="cart-item">
-            <!-- Apenas tornar clicável se houver URL remota; quando não houver, mostrar somente o fallback sem link -->
+            
             <th:block th:if="${item.capaUrl != null and !#strings.isEmpty(item.capaUrl)}">
                 <a th:href="${item.capaUrl}" target="_blank" rel="noopener noreferrer">
                     <img th:src="${item.capaUrl}" alt="Capa" class="cart-capa" onerror="this.src='/img/no-cover.svg'" th:attr="title=${item.nomeLivro}" />
                 </a>
             </th:block>
             <th:block th:unless="${item.capaUrl != null and !#strings.isEmpty(item.capaUrl)}">
-                <!-- Tentar usar capa direto do Google Books pelo id do volume; se falhar, onerror troca para fallback local -->
+                
                 <a th:href="${'https://books.google.com/books/content?id=' + item.livroId + '&printsec=frontcover&img=1&zoom=1&source=gbs_api'}" target="_blank" rel="noopener noreferrer">
                     <img th:src="${'https://books.google.com/books/content?id=' + item.livroId + '&printsec=frontcover&img=1&zoom=1&source=gbs_api'}" alt="Sem capa" class="cart-capa" onerror="this.src='/img/no-cover.svg'" />
                 </a>
@@ -57,7 +55,7 @@
         </div>
     </div>
     
-    <!-- Total box -->
+    
     <div class="cart-total-wrap" th:if="${not #lists.isEmpty(itens)}">
         <div class="cart-total-box">
             <div class="cart-total-left">Total: <span class="total-amount" th:text="${totalFormatado}">R$ 0,00</span></div>
@@ -77,7 +75,7 @@
         .cart-info p { margin:0; color:#d6cfea; }
         .cart-preco { margin-top:8px; font-weight:600; color:#fff; }
         .cart-preco::before { content: '\00a0'; }
-        /* Total box styles */
+        
         .cart-total-wrap { margin-top:18px; display:flex; justify-content:center; }
         .cart-total-box { background:#ffffff; color:#1a1220; border-radius:12px; padding:14px 18px; width:100%; max-width:920px; display:flex; align-items:center; justify-content:space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
         .cart-total-left { font-size:18px; font-weight:700; }
@@ -88,3 +86,5 @@
 
 </body>
 </html>
+
+

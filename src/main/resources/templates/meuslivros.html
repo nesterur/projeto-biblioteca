@@ -1,23 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>Meus Livros</title>
-    <!-- global base styles -->
+    
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    <!-- include dashboard rules so navbar and shared components keep exact dashboard look -->
+    
     <link rel="stylesheet" th:href="@{/css/styles-dashboard.css}" />
-    <!-- icon font used by navbar (cart icon) -->
+    
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- page-specific overrides (kept last so it can tweak layout if needed) -->
+    
     <link rel="stylesheet" th:href="@{/css/styles-meuslivros.css}" />
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
     <div class="checkout-success meuslivros-container">
-    <!-- nota pagina meus livros
-         mostra livros ativos e expirados para o usuario
-    -->
+    
     <h1>Meus Livros</h1>
 
     <div th:if="${error}">
@@ -29,7 +27,7 @@
         <div th:if="${#lists.isEmpty(ativos)}">Nenhum livro ativo no momento</div>
         <div class="meuslivros-list" th:if="${!#lists.isEmpty(ativos)}">
             <div th:each="item : ${ativos}" class="meuslivro-row" th:classappend="${item.rentalEnd != null and item.rentalEnd.isBefore(T(java.time.LocalDateTime).now())} ? ' meuslivro-expired' : ''">
-                <!-- OrderItem doesn't have capaUrl; build Google Books cover URL from livroId and fallback to local no-cover.svg -->
+                
                 <img th:src="${'https://books.google.com/books/content?id=' + item.livroId + '&printsec=frontcover&img=1&zoom=1&source=gbs_api'}" alt="Capa" class="meuslivro-capa" onerror="this.src='/img/no-cover.svg'" th:attr="title=${item.nomeLivro}" />
                 <div class="meuslivro-meta">
                     <div class="titulo" th:text="${item.nomeLivro}">titulo</div>
@@ -48,13 +46,13 @@
         <div th:if="${#lists.isEmpty(expirados)}">Nenhum livro expirado</div>
         <div class="meuslivros-list" th:if="${!#lists.isEmpty(expirados)}">
             <div th:each="item : ${expirados}" class="meuslivro-row meuslivro-expired">
-                <!-- OrderItem doesn't have capaUrl; build Google Books cover URL from livroId and fallback to local no-cover.svg -->
+                
                 <img th:src="${'https://books.google.com/books/content?id=' + item.livroId + '&printsec=frontcover&img=1&zoom=1&source=gbs_api'}" alt="Capa" class="meuslivro-capa" onerror="this.src='/img/no-cover.svg'" th:attr="title=${item.nomeLivro}" />
                 <div class="meuslivro-meta">
                     <div class="titulo" th:text="${item.nomeLivro}">titulo</div>
                     <div class="meta-row">inicio: <span th:text="${#temporals.format(item.rentalStart, 'dd/MM/yyyy')}"></span></div>
                     <div class="meta-row">fim: <span th:text="${#temporals.format(item.rentalEnd, 'dd/MM/yyyy')}"></span></div>
-                    <!-- preço oculto nesta tela por decisão do produto -->
+                    
                 </div>
                 <div class="meuslivro-actions">
                     <a th:href="@{/meuslivros(idUsuario=${idUsuario})}" class="btn-meuslivros">detalhes</a>
@@ -69,3 +67,6 @@
 </div>
 </body>
 </html>
+
+
+

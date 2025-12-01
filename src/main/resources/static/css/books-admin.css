@@ -1,4 +1,4 @@
-
+﻿
 
 .admin-books .books-page {
   max-width: 980px;
@@ -86,7 +86,6 @@
 .admin-books .book-actions .unblock { background:#28a745; color:#fff; }
 .admin-books .book-actions .ghost { background:transparent; color:#4a1a68; border:2px solid rgba(74,26,104,0.12); }
 
-/* cover image */
 .admin-books .book-cover {
   width: 64px;
   height: 96px;
@@ -104,3 +103,4 @@
   .admin-books .result-table td { padding-left: 50%; position: relative; }
   .admin-books .result-table td::before { position: absolute; left: 12px; width: 45%; white-space: nowrap; content: attr(data-label); font-weight:700; color:#444; }
 }
+

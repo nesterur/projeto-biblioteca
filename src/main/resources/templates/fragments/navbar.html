@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<!-- Navbar fragment: use in pages that need the top navigation -->
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
+
 <div th:fragment="navbar">
     <div class="navbar">
         <div class="nav-left">
             <ul class="nav-links" style="margin:0;">
-                <!-- Esconde 'Meus Livros' para funcionários -->
+                
                 <li th:if="${session.tipoUsuario != 'FUNCIONARIO'}"><a th:href="@{/meuslivros(idUsuario=${session.idUsuario})}" href="meuslivros.html" class="btn-meuslivros">Meus Livros</a></li>
                 <li><a th:href="@{/logout}" href="login.html">Log Out</a></li>
             </ul>
@@ -14,12 +14,12 @@
             <div class="logo">
                 <img src="/img/iconesite.png" alt="Logo do Site">
             </div>
-            <!-- site title becomes a link to dashboard and styled like the Meus Livros 'contour' -->
+            
             <a th:href="@{/dashboard}" class="site-title site-title-link">Acervo E-Reading</a>
         </div>
 
         <div class="nav-right">
-            <!-- Esconde ícone do carrinho para funcionários -->
+            
             <a th:if="${session.tipoUsuario != 'FUNCIONARIO'}" th:href="@{/carrinho(idUsuario=${session.idUsuario})}" title="Ver Carrinho" class="cart-link">
                 <i class="bx bx-cart"></i>
             </a>

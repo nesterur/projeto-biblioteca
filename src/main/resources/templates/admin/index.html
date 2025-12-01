@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="iconesite/png" href="/img/iconesite.png">
     <style>
-        /* Keep header text white, cards inherit their own colors */
+        
         .header-content h1, .header-content p, .header-content span { color: #fff; }
         .card { background: #fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); width:260px; text-align:center; }
         .card h3 { margin:8px 0 6px; }
@@ -75,7 +75,7 @@
         </main>
     </header>
 
-    <!-- flash messages -->
+    
     <div style="max-width:1000px; margin:18px auto;">
         <div th:if="${sucessoAdmin != null}" style="background:#0a0; color:#fff; padding:8px; border-radius:6px; margin-bottom:12px;">
             <span th:text="${sucessoAdmin}">Administrador criado — login: 00001</span>
@@ -93,9 +93,11 @@
 
     <main style="max-width:1000px; margin:0 auto; padding:18px;">
         <section style="margin-top:12px; text-align:center;">
-            <p>As ferramentas de criação, exclusão e bloqueio de entidades foram movidas para a página de gerenciamento. Use o botão abaixo para acessar os livros disponíveis no estoque e gerenciar bloqueios.</p>
             <a class="btn" th:href="@{/admin/books}" style="background:#fff; color:#000; padding:12px 18px; border-radius:8px; text-decoration:none;">Livros no Estoque</a>
         </section>
     </main>
 </body>
 </html>
+
+
+

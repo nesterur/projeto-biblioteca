@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <!-- small script removed: use the centralized script at the end of the file to manage Categorias -->
+    
     <div th:replace="fragments/navbar :: navbar"></div>
     <header class="header">
         <div class="header-content" style="text-align:center;">
@@ -28,7 +28,7 @@
                 </div>
             </form>
 
-            <!-- Categories panel: placed to the right of the search bar, outside the search form -->
+            
             <form th:if="${genres != null}" action="/livros" method="get" class="categories-panel" style="margin-right:24px;">
                 <input type="hidden" name="busca" th:value="${busca}" />
                 <input type="hidden" name="tamanho" th:value="${tamanho != null ? tamanho : 12}" />
@@ -38,15 +38,13 @@
                 </select>
             </form>
         </div>
-        <!-- Empty state: shown when there are no search results -->
+        
         <div th:if="${#lists.isEmpty(livros)}" class="empty-state">
             <p>Você ainda não fez nenhuma pesquisa. Tente palavras-chave do seu livro favorito!</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(livros)}" class="container">
-            <!-- nota pagina dashboard
-             mostra livros resultados de busca permitir adicionar ao carrinho
-            -->
+            
             <div th:each="livro : ${livros}" class="book-card book-hover">
                 <img th:src="${livro.urlCapa}" alt="Capa do Livro">
                 <h3 th:text="${livro.titulo}">Título do Livro</h3>
@@ -78,7 +76,7 @@
         </div>
     </header>
 <script>
-// Torna o submit do formulário de adicionar ao carrinho assíncrono (AJAX)
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.add-carrinho-form').forEach(form => {
         form.addEventListener('submit', function(e) {
@@ -90,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(async response => {
                 if (response.ok) {
-                    // Opcional: feedback visual
+                    
                     const btn = form.querySelector('.btn-carrinho');
                     if (btn) {
                         const icon = btn.querySelector('i');
@@ -103,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     let text = '';
-                    try { text = await response.text(); } catch (e) { /* ignore */ }
+                    try { text = await response.text(); } catch (e) {  }
                     alert('Erro ao adicionar ao carrinho: ' + (text || response.statusText));
                 }
             })
@@ -114,3 +112,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
+

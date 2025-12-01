@@ -1,4 +1,6 @@
-package com.bibliotecassa.trabalho.Services.Usuarios;
+﻿package com.bibliotecassa.trabalho.Services.Usuarios;
+// arquivo AdminController.java
+// finalidade classe AdminController comentarios automatizados
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
+// definicao de class nome AdminController
 public class AdminController {
 
     @Autowired
@@ -29,7 +32,8 @@ public class AdminController {
     @Autowired
     private com.bibliotecassa.trabalho.Services.Pedidos.OrderRepository orderRepository;
 
-    // Verifica se a sessão atual pertence a um admin
+    
+
     private boolean isAdminSession(HttpSession session) {
         if (session == null) return false;
         Object id = session.getAttribute("idUsuario");
@@ -40,25 +44,28 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard-admin")
+
     public String dashboardAdmin(HttpSession session, Model model) {
         if (!isAdminSession(session)) return "redirect:/login";
         model.addAttribute("admins", adminRepository.findAll());
         model.addAttribute("funcionarios", funcionarioRepository.findAll());
-        // render the admin subpage index (keeps same design)
+        
         return "admin/index";
     }
 
     @PostMapping("/admin/create")
+
     public String createAdmin(@RequestParam String nome, @RequestParam String email, @RequestParam String senha, HttpSession session, Model model, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         Admin a = new Admin(nome, email, senha);
         adminRepository.save(a);
-        // pass success message (login gerado) via flash attribute
+        
     ra.addFlashAttribute("sucessoAdmin", "Administrador criado — login: " + a.getLoginAdmin());
     return "redirect:/admin/manage-users";
     }
 
     @PostMapping("/admin/delete")
+
     public String deleteAdmin(@RequestParam String loginAdmin, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         Admin a = adminRepository.findByLoginAdmin(loginAdmin);
@@ -72,6 +79,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/create-funcionario")
+
     public String createFuncionario(@RequestParam String nome, @RequestParam String email, @RequestParam String senha, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         Funcionario f = new Funcionario(nome, email, senha);
@@ -79,13 +87,13 @@ public class AdminController {
             funcionarioRepository.save(f);
             ra.addFlashAttribute("mensagemSucesso", "Funcionário criado — id: " + f.getIdFuncionario());
         } catch (DataIntegrityViolationException dive) {
-            // likely duplicate id or unique constraint violation
+            
             ra.addFlashAttribute("mensagemErro", "esse id já existe");
         } catch (ConstraintViolationException cve) {
-            // bean validation errors (e.g., invalid email)
+            
             ra.addFlashAttribute("mensagemErro", "Erro de validação: " + cve.getMessage());
         } catch (Exception e) {
-            // try to detect nested validation exception
+            
             Throwable cause = e.getCause();
             boolean handled = false;
             while (cause != null) {
@@ -104,6 +112,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/delete-funcionario")
+
     public String deleteFuncionario(@RequestParam String idFuncionario, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         Funcionario f = funcionarioRepository.findByIdFuncionario(idFuncionario);
@@ -116,9 +125,10 @@ public class AdminController {
     return "redirect:/admin/manage-users";
     }
 
-    // --- Admin views with same features as Funcionario ---
+    
 
     @GetMapping("/admin/volume-alugueis")
+
     public String volumeAlugueisAdmin(HttpSession session, Model model) {
         if (!isAdminSession(session)) return "redirect:/login";
         List<Object[]> rows = orderItemRepository.findVolumeAlugueisPorLivro();
@@ -137,12 +147,14 @@ public class AdminController {
     }
 
     @GetMapping("/admin/consultar-usuario")
+
     public String consultarUsuarioFormAdmin(HttpSession session) {
         if (!isAdminSession(session)) return "redirect:/login";
         return "admin/consultar-usuario";
     }
 
     @PostMapping("/admin/consultar-usuario")
+
     public String consultarUsuarioSubmitAdmin(@RequestParam String cpf, Model model, HttpSession session) {
         if (!isAdminSession(session)) return "redirect:/login";
         com.bibliotecassa.trabalho.Services.Usuarios.UsuarioComum usuario = usuarioComumRepository.findByCpf(cpf);
@@ -181,6 +193,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/historico")
+
     public String historicoAdmin(HttpSession session, Model model, @RequestParam(required = false) String usuarioCpf, @RequestParam(required = false) String livroId) {
         if (!isAdminSession(session)) return "redirect:/login";
 
@@ -238,14 +251,15 @@ public class AdminController {
         return "admin/historico";
     }
 
-    // --- Gerenciamento de Usuários (Admin) ---
+    
 
     @GetMapping("/admin/manage-users")
+
     public String manageUsers(HttpSession session, Model model) {
         if (!isAdminSession(session)) return "redirect:/login";
         model.addAttribute("users", usuarioComumRepository.findAll());
         model.addAttribute("admins", adminRepository.findAll());
-        // defensive: ensure the list assigned to 'funcionarios' contains only Funcionario instances
+        
         java.util.List<Funcionario> rawFuncs = funcionarioRepository.findAll();
         java.util.List<Funcionario> onlyFuncs = new java.util.ArrayList<>();
         if (rawFuncs != null) {
@@ -258,10 +272,11 @@ public class AdminController {
     }
 
     @PostMapping("/admin/manage-users/create")
+
     public String createUser(@RequestParam String nome, @RequestParam(required = false) String cpf, @RequestParam String email, @RequestParam String senha, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         if (cpf == null || cpf.isBlank()) {
-            // Friendly handling: if cpf is missing, do not throw 400 — return with an error message
+            
             ra.addFlashAttribute("mensagemErro", "CPF obrigatório para criar usuário.");
             return "redirect:/admin/manage-users";
         }
@@ -276,6 +291,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/manage-users/delete")
+
     public String deleteUser(@RequestParam String cpf, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         com.bibliotecassa.trabalho.Services.Usuarios.UsuarioComum u = usuarioComumRepository.findByCpf(cpf);
@@ -289,6 +305,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/block-entity")
+
     public String blockEntity(@RequestParam String entityType, @RequestParam String identifier, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         try {
@@ -313,6 +330,11 @@ public class AdminController {
                     com.bibliotecassa.trabalho.Services.Usuarios.UsuarioComum u = usuarioComumRepository.findByCpf(identifier);
                     if (u != null) {
                         u.setAtivo(false);
+                        try {
+                            u.bloquearUsuario(null);
+                        } catch (Exception ex) {
+                            u.setBloqueado(true);
+                        }
                         usuarioComumRepository.save(u);
                         ra.addFlashAttribute("mensagemSucesso", "Usuário bloqueado: " + identifier);
                     } else ra.addFlashAttribute("mensagemErro", "Usuário não encontrado: " + identifier);
@@ -327,6 +349,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/unblock-entity")
+
     public String unblockEntity(@RequestParam String entityType, @RequestParam String identifier, HttpSession session, RedirectAttributes ra) {
         if (!isAdminSession(session)) return "redirect:/login";
         try {
@@ -351,6 +374,11 @@ public class AdminController {
                     com.bibliotecassa.trabalho.Services.Usuarios.UsuarioComum u = usuarioComumRepository.findByCpf(identifier);
                     if (u != null) {
                         u.setAtivo(true);
+                        try {
+                            u.desbloquearUsuario();
+                        } catch (Exception ex) {
+                            u.setBloqueado(false);
+                        }
                         usuarioComumRepository.save(u);
                         ra.addFlashAttribute("mensagemSucesso", "Usuário desbloqueado: " + identifier);
                     } else ra.addFlashAttribute("mensagemErro", "Usuário não encontrado: " + identifier);

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -12,9 +12,9 @@
     <main style="max-width:1000px; margin:40px auto; color:#fff;">
         <h2>Gerenciar Usuários</h2>
 
-        <!-- Top quick-action cards removed: we are already inside a card (Interagir) so top cards were redundant -->
+        
 
-        <!-- Interagir com Entidades (mantido) -->
+        
         <section id="interagir" style="margin-top:18px; display:flex; justify-content:center;">
             <div class="card" style="width:640px;">
                 <i class='bx bx-cog' style="font-size:36px;"></i>
@@ -106,9 +106,9 @@
             <span th:text="${mensagemErro}">Erro na operação</span>
         </div>
 
-        <!-- Tabelas de entidades -->
+        
         <section style="margin-top:24px; display:flex; flex-direction:column; gap:20px;">
-            <!-- Administradores -->
+            
             <div>
                 <h4>Administradores</h4>
                 <table class="result-table" style="width:100%">
@@ -125,12 +125,12 @@
                                     <input type="hidden" name="loginAdmin" th:value="${admin.loginAdmin}" />
                                     <button type="submit" class="btn-carrinho">Deletar</button>
                                 </form>
-                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                <form th:if="${admin.ativo}" th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
                                     <input type="hidden" name="entityType" value="ADMIN" />
                                     <input type="hidden" name="identifier" th:value="${admin.loginAdmin}" />
                                     <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
                                 </form>
-                                <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                <form th:if="${!admin.ativo}" th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
                                     <input type="hidden" name="entityType" value="ADMIN" />
                                     <input type="hidden" name="identifier" th:value="${admin.loginAdmin}" />
                                     <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
@@ -141,7 +141,7 @@
                 </table>
             </div>
 
-            <!-- Funcionários -->
+            
             <div>
                 <h4>Funcionários</h4>
                 <table class="result-table" style="width:100%">
@@ -158,12 +158,12 @@
                                     <input type="hidden" name="idFuncionario" th:value="${func.identificadorLogin}" />
                                     <button type="submit" class="btn-carrinho">Deletar</button>
                                 </form>
-                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                <form th:if="${func.ativo}" th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
                                     <input type="hidden" name="entityType" value="FUNCIONARIO" />
                                     <input type="hidden" name="identifier" th:value="${func.identificadorLogin}" />
                                     <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
                                 </form>
-                                <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                <form th:if="${!func.ativo}" th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
                                     <input type="hidden" name="entityType" value="FUNCIONARIO" />
                                     <input type="hidden" name="identifier" th:value="${func.identificadorLogin}" />
                                     <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
@@ -174,7 +174,7 @@
                 </table>
             </div>
 
-            <!-- Usuários comuns -->
+            
             <div>
                 <h4>Usuários</h4>
                 <table class="result-table" style="width:100%">
@@ -191,16 +191,16 @@
                                     <input type="hidden" name="cpf" th:value="${u.cpf}" />
                                     <button type="submit" class="btn-carrinho">Deletar</button>
                                 </form>
-                                <form th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
+                                <form th:if="${(u.bloqueado != true) and (u.ativo == true)}" th:action="@{/admin/block-entity}" method="post" style="display:inline; margin-left:6px;">
                                     <input type="hidden" name="entityType" value="USUARIO" />
                                     <input type="hidden" name="identifier" th:value="${u.cpf}" />
                                     <button type="submit" class="btn-carrinho" style="background:#e67;">Bloquear</button>
                                 </form>
-                                    <form th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
-                                        <input type="hidden" name="entityType" value="USUARIO" />
-                                        <input type="hidden" name="identifier" th:value="${u.cpf}" />
-                                        <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
-                                    </form>
+                                <form th:if="${(u.bloqueado == true) or (u.ativo == false)}" th:action="@{/admin/unblock-entity}" method="post" style="display:inline; margin-left:6px;">
+                                    <input type="hidden" name="entityType" value="USUARIO" />
+                                    <input type="hidden" name="identifier" th:value="${u.cpf}" />
+                                    <button type="submit" class="btn-carrinho" style="background:#2ecc71;">Desbloquear</button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>
@@ -210,3 +210,6 @@
     </main>
 </body>
 </html>
+
+
+

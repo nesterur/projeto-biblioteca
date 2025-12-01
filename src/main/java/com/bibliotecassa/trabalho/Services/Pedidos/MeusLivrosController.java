@@ -1,4 +1,6 @@
-package com.bibliotecassa.trabalho.Services.Pedidos;
+﻿package com.bibliotecassa.trabalho.Services.Pedidos;
+// arquivo MeusLivrosController.java
+// finalidade classe MeusLivrosController comentarios automatizados
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,19 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+// definicao de class nome MeusLivrosController
 public class MeusLivrosController {
 
-    // pagina meus livros divide em ativos e expirados
+    
 
     private final OrderItemRepository orderItemRepository;
+
 
     public MeusLivrosController(OrderItemRepository orderItemRepository) {
         this.orderItemRepository = orderItemRepository;
     }
 
     @GetMapping("/meuslivros")
+
     public String meusLivros(@RequestParam(name = "idUsuario", required = false) String usuarioId, Model model, jakarta.servlet.http.HttpSession session) {
-        // se idUsuario nao for passado via param, tenta ler da sessao
+        
         if (usuarioId == null || usuarioId.isBlank()) {
             Object s = session != null ? session.getAttribute("idUsuario") : null;
             if (s != null) usuarioId = s.toString();
@@ -56,3 +61,7 @@ public class MeusLivrosController {
         return "meuslivros";
     }
 }
+
+
+
+

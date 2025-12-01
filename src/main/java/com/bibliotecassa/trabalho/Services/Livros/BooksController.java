@@ -1,4 +1,6 @@
-package com.bibliotecassa.trabalho.Services.Livros;
+﻿package com.bibliotecassa.trabalho.Services.Livros;
+// arquivo BooksController.java
+// finalidade classe BooksController comentarios automatizados
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,24 +15,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 
 @Controller
+// definicao de class nome BooksController
 public class BooksController {
 
     @Autowired
     private BlockedBookRepository blockedBookRepository;
 
-    // use Open Library search API for public book search
+    // serviceLivro não é necessário aqui para o comportamento desejado
+
+    
     private final String externalApiBase = "https://openlibrary.org/search.json";
 
     private RestTemplate rest = new RestTemplate();
     private ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping("/admin/books")
+
     public String booksMain(HttpSession session, Model model, @RequestParam(required = false) String q, @RequestParam(required = false) String view) {
-        // simple admin guard (re-use existing session check pattern)
+        
         Object id = session != null ? session.getAttribute("idUsuario") : null;
         if (id == null) return "redirect:/login";
 
-        // fetch blocked ids
+        
         List<BlockedBook> blocked = blockedBookRepository.findAll();
         Set<String> blockedIds = new HashSet<>();
         for (BlockedBook b : blocked) blockedIds.add(b.getBookId());
@@ -45,7 +51,7 @@ public class BooksController {
                 String url = externalApiBase + "?q=" + java.net.URLEncoder.encode(q, java.nio.charset.StandardCharsets.UTF_8);
                 String resp = rest.getForObject(url, String.class);
                 if (resp != null && !resp.isBlank()) {
-                    // OpenLibrary returns an object with 'docs' array
+                    
                     Map<?,?> top = mapper.readValue(resp, Map.class);
                     Object docsObj = top.get("docs");
                     if (docsObj instanceof List) {
@@ -55,7 +61,7 @@ public class BooksController {
                                 @SuppressWarnings("unchecked")
                                 Map<String,Object> doc = (Map<String,Object>) o;
                                 Map<String,Object> m = new HashMap<>();
-                                // prefer cover_edition_key or key as id
+                                
                                 Object cover = doc.get("cover_edition_key");
                                 Object key = doc.get("key");
                                 String idVal = cover != null ? cover.toString() : (key != null ? key.toString().replaceAll("^/works/", "") : UUID.randomUUID().toString());
@@ -63,7 +69,7 @@ public class BooksController {
                                 m.put("title", doc.getOrDefault("title", "(sem título)"));
                                 Object author = doc.get("author_name");
 
-                                // build cover URL if available (OpenLibrary)
+                                
                                 String coverUrl = null;
                                 Object cover_i = doc.get("cover_i");
                                 if (cover != null) {
@@ -93,9 +99,9 @@ public class BooksController {
             }
         }
 
-        // depending on view, prepare blocked-only list
+        
         if ("blocked".equalsIgnoreCase(view)) {
-            // show blocked books (we don't have full book info locally) — present only ids
+            
             List<Map<String,Object>> blockedList = new ArrayList<>();
             for (BlockedBook b : blocked) {
                 Map<String,Object> m = new HashMap<>();
@@ -112,6 +118,8 @@ public class BooksController {
     }
 
     @PostMapping("/admin/books/block")
+
+
     public String blockBook(@RequestParam String bookId, RedirectAttributes ra, HttpSession session) {
         Object id = session != null ? session.getAttribute("idUsuario") : null;
         if (id == null) return "redirect:/login";
@@ -131,6 +139,8 @@ public class BooksController {
     }
 
     @PostMapping("/admin/books/unblock")
+
+
     public String unblockBook(@RequestParam String bookId, RedirectAttributes ra, HttpSession session) {
         Object id = session != null ? session.getAttribute("idUsuario") : null;
         if (id == null) return "redirect:/login";
@@ -143,4 +153,10 @@ public class BooksController {
         }
         return "redirect:/admin/books?view=blocked";
     }
+
 }
+
+
+
+
+

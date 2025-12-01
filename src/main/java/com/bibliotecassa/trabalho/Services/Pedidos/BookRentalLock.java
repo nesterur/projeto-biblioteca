@@ -1,10 +1,13 @@
-package com.bibliotecassa.trabalho.Services.Pedidos;
+﻿package com.bibliotecassa.trabalho.Services.Pedidos;
+// arquivo BookRentalLock.java
+// finalidade classe BookRentalLock comentarios automatizados
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "book_rental_lock")
+// definicao de class nome BookRentalLock
 public class BookRentalLock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +28,31 @@ public class BookRentalLock {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+
     public BookRentalLock() {}
+
     public Long getId() { return id; }
+
     public String getLivroId() { return livroId; }
+
     public void setLivroId(String livroId) { this.livroId = livroId; }
+
     public Long getOrderId() { return orderId; }
+
     public void setOrderId(Long orderId) { this.orderId = orderId; }
+
     public String getUsuarioId() { return usuarioId; }
+
     public void setUsuarioId(String usuarioId) { this.usuarioId = usuarioId; }
+
     public LocalDateTime getRentedUntil() { return rentedUntil; }
+
     public void setRentedUntil(LocalDateTime rentedUntil) { this.rentedUntil = rentedUntil; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
+
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
+
+
+

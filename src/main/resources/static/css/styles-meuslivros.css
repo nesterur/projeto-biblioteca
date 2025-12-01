@@ -1,6 +1,5 @@
-/* Meus Livros — page-specific styles (follow dashboard look) */
+﻿
 
-/* Base page (match dashboard background and base text color) */
 body {
   background: #221a23;
   color: #eaeaea;
@@ -29,7 +28,6 @@ body {
   padding: 12px;
 }
 
-/* each item as a card in a 4-column grid */
 .meuslivro-row {
   display: flex;
   flex-direction: column;
@@ -77,3 +75,4 @@ body {
   .navbar-center { position: static; transform: none; }
   .nav-links { display: none; }
 }
+

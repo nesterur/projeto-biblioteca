@@ -1,12 +1,7 @@
-/* ANOTAÇÕES - FuncionarioController.java
- * O QUE: Controller com rotas para funcionalidades do funcionário (dashboard, consultas).
- * POR QUE: separa a interface de funcionário da de usuários comuns e disponibiliza
- *        endpoints administrativos (consultas, relatórios de volume e histórico).
- * ENTRADAS: parâmetros HTTP (query/form) e sessão (session.tipoUsuario).
- * SAÍDAS: modelos para views Thymeleaf contendo volume, histórico e consultas.
- * NOTAS: rotas devem checar session.tipoUsuario == "FUNCIONARIO" antes de exibir dados.
- */
+﻿
 package com.bibliotecassa.trabalho.Services.Usuarios;
+// arquivo FuncionarioController.java
+// finalidade classe FuncionarioController comentarios automatizados
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
+// definicao de class nome FuncionarioController
 public class FuncionarioController {
 
     @Autowired
@@ -30,27 +26,29 @@ public class FuncionarioController {
     @Autowired
     private com.bibliotecassa.trabalho.Services.Pedidos.OrderRepository orderRepository;
 
-    // Mostrar dashboard específico para funcionários
+    
     @GetMapping("/dashboard-funcionario")
+
     public String dashboardFuncionario(HttpSession session, Model model) {
-        // opcional: checar se está logado como funcionário
+        
         Object tipo = session.getAttribute("tipoUsuario");
         if (tipo == null || !"FUNCIONARIO".equals(tipo.toString())) {
-            // não é funcionário — redireciona ao login
+            
             return "redirect:/login";
         }
-        // manter nome na view via sessão (fragmento navbar usa session.nomeUsuario)
+        
         return "dashboard-funcionario";
     }
 
-    // Página que mostra volume de aluguéis por livro (placeholder)
+    
     @GetMapping("/funcionario/volume-alugueis")
+
     public String volumeAlugueis(HttpSession session, Model model) {
         Object tipo = session.getAttribute("tipoUsuario");
         if (tipo == null || !"FUNCIONARIO".equals(tipo.toString())) return "redirect:/login";
-        // busca agregada: livroId, nomeLivro, total
+        
         List<Object[]> rows = orderItemRepository.findVolumeAlugueisPorLivro();
-        // converte para uma estrutura mais fácil de usar no template
+        
         List<java.util.Map<String,Object>> volume = new java.util.ArrayList<>();
         for (Object[] r : rows) {
             java.util.Map<String,Object> m = new java.util.HashMap<>();
@@ -63,8 +61,9 @@ public class FuncionarioController {
         return "funcionario/volume-alugueis";
     }
 
-    // Form para consultar usuário por CPF
+    
     @GetMapping("/funcionario/consultar-usuario")
+
     public String consultarUsuarioForm(HttpSession session) {
         Object tipo = session.getAttribute("tipoUsuario");
         if (tipo == null || !"FUNCIONARIO".equals(tipo.toString())) return "redirect:/login";
@@ -72,15 +71,16 @@ public class FuncionarioController {
     }
 
     @PostMapping("/funcionario/consultar-usuario")
+
     public String consultarUsuarioSubmit(@RequestParam String cpf, Model model, HttpSession session) {
         Object tipo = session.getAttribute("tipoUsuario");
         if (tipo == null || !"FUNCIONARIO".equals(tipo.toString())) return "redirect:/login";
-        // buscar usuario comum pelo CPF
+        
         UsuarioComum usuario = usuarioComumRepository.findByCpf(cpf);
         model.addAttribute("usuarioResult", usuario);
-        // se encontrou o usuário, calcular quantos livros ele alugou e checar status de pagamentos
+        
         if (usuario != null) {
-            // contar itens alugados (soma de quantidade em order_item ligados ao usuario)
+            
             List<com.bibliotecassa.trabalho.Services.Pedidos.OrderItem> items = orderItemRepository.findByOrderUsuarioId(cpf);
             long totalAlugados = 0L;
             if (items != null) {
@@ -91,7 +91,7 @@ public class FuncionarioController {
             }
             model.addAttribute("totalAlugados", totalAlugados);
 
-            // checar se todos os pagamentos estão em dia: assumir que status 'FAILED','PENDING','CANCELLED' indicam problemas
+            
             List<com.bibliotecassa.trabalho.Services.Pedidos.Order> orders = orderRepository.findByUsuarioId(cpf);
             boolean pagamentosEmDia = true;
             if (orders != null) {
@@ -114,18 +114,19 @@ public class FuncionarioController {
         return "funcionario/consultar-usuario";
     }
 
-    // Histórico (ativos e alugados) — placeholder
+    
     @GetMapping("/funcionario/historico")
+
     public String historicoFuncionario(HttpSession session, Model model, @RequestParam(required = false) String usuarioCpf, @RequestParam(required = false) String livroId) {
         Object tipo = session.getAttribute("tipoUsuario");
         if (tipo == null || !"FUNCIONARIO".equals(tipo.toString())) return "redirect:/login";
 
-        // obter order items, possivelmente filtrando por usuarioCpf ou livroId
+        
         java.util.List<com.bibliotecassa.trabalho.Services.Pedidos.OrderItem> items;
         if (usuarioCpf != null && !usuarioCpf.isBlank()) {
             items = orderItemRepository.findByOrderUsuarioId(usuarioCpf);
         } else if (livroId != null && !livroId.isBlank()) {
-            // ainda não existe um método específico, usar findAll e filtrar
+            
             items = orderItemRepository.findAll();
             items = items.stream().filter(i -> livroId.equals(i.getLivroId())).toList();
         } else {
@@ -139,17 +140,17 @@ public class FuncionarioController {
             java.util.Map<String,Object> m = new java.util.HashMap<>();
             String titulo = oi.getNomeLivro();
             m.put("titulo", titulo != null ? titulo : oi.getLivroId());
-            // prefer rentalStart if present, otherwise use order.createdAt if available
+            
             java.time.LocalDateTime dt = oi.getRentalStart();
             if (dt == null && oi.getOrder() != null) dt = oi.getOrder().getCreatedAt();
-            m.put("dtObj", dt); // keep object for sorting
+            m.put("dtObj", dt); 
             String data = dt != null ? dt.format(fmt) : "-";
             m.put("data", data);
             Integer q = oi.getQuantidade();
             m.put("quantidade", q != null ? q : 1);
             Integer dias = oi.getRentalDays();
             m.put("dias", dias != null ? dias : 0);
-            // usuario nome via order.usuarioId
+            
             String usuarioId = oi.getOrder() != null ? oi.getOrder().getUsuarioId() : null;
             String nomeUsuario = "-";
             if (usuarioId != null) {
@@ -161,7 +162,7 @@ public class FuncionarioController {
             rows.add(m);
         }
 
-        // sort by dtObj desc (newest first), nulls last
+        
         rows.sort((a,b) -> {
             java.time.LocalDateTime da = (java.time.LocalDateTime)a.get("dtObj");
             java.time.LocalDateTime db = (java.time.LocalDateTime)b.get("dtObj");
@@ -171,7 +172,7 @@ public class FuncionarioController {
             return db.compareTo(da);
         });
 
-        // remove dtObj before sending to template (keep formatted data)
+        
         for (java.util.Map<String,Object> m : rows) {
             m.remove("dtObj");
         }
@@ -180,3 +181,7 @@ public class FuncionarioController {
         return "funcionario/historico";
     }
 }
+
+
+
+

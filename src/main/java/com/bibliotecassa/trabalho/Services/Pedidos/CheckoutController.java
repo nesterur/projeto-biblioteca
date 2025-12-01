@@ -1,4 +1,6 @@
-package com.bibliotecassa.trabalho.Services.Pedidos;
+﻿package com.bibliotecassa.trabalho.Services.Pedidos;
+// arquivo CheckoutController.java
+// finalidade classe CheckoutController comentarios automatizados
 
 import com.bibliotecassa.trabalho.Services.CarrinhoCompras.CarrinhoItem;
 import com.bibliotecassa.trabalho.Services.CarrinhoCompras.ServiceCarrinho;
@@ -14,17 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+// definicao de class nome CheckoutController
 public class CheckoutController {
 
-    // controller responsavel pelo fluxo de finalizacao de aluguel
-    // persiste order order_item limpa o carrinho prepara dados para view de sucesso
-
+    
+    
 
     private final ServiceCarrinho serviceCarrinho;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
-    // flat tier percentages: 7d=10%, 14d=18%, 30d=30%
+    
     private static final BigDecimal PCT_7 = new BigDecimal("0.10");
     private static final BigDecimal PCT_14 = new BigDecimal("0.18");
     private static final BigDecimal PCT_30 = new BigDecimal("0.30");
@@ -38,6 +40,7 @@ public class CheckoutController {
     }
 
     @GetMapping("/checkout")
+
     public String showCheckout(@RequestParam(name = "idUsuario") String usuarioId, Model model) {
         List<CarrinhoItem> itens = serviceCarrinho.obterCarrinhoPorUsuario(usuarioId);
         model.addAttribute("itens", itens);
@@ -74,10 +77,10 @@ public class CheckoutController {
         order.setStatus("RENTED");
         order.setCreatedAt(now);
 
-        // compute items and total
+        
         for (CarrinhoItem ci : itens) {
             BigDecimal preco = ci.getPreco() != null ? ci.getPreco() : BigDecimal.ZERO;
-            // calcular valor do aluguel aplicar arredondamento half up
+            
             BigDecimal rentalPrice = preco.multiply(pct).setScale(2, java.math.RoundingMode.HALF_UP);
             total = total.add(rentalPrice);
 
@@ -98,16 +101,16 @@ public class CheckoutController {
         order.setTotal(total);
         orderRepository.save(order);
 
-        // save items (no locks for e-books)
+        
         for (OrderItem oi : savedItems) {
             oi.setOrder(order);
             orderItemRepository.save(oi);
         }
 
-        // expose order items to the success template
+        
         model.addAttribute("orderItems", savedItems);
 
-        // clear cart
+        
         serviceCarrinho.limparCarrinhoDoUsuario(usuarioId);
 
         model.addAttribute("orderId", order.getId());
@@ -115,3 +118,8 @@ public class CheckoutController {
         return "checkout_success";
     }
 }
+
+
+
+
+

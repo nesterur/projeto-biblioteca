@@ -1,5 +1,6 @@
-package com.bibliotecassa.trabalho.Services.CarrinhoCompras;
-
+﻿package com.bibliotecassa.trabalho.Services.CarrinhoCompras;
+// arquivo ServiceCarrinho.java
+// finalidade classe ServiceCarrinho comentarios automatizados
 
 import com.bibliotecassa.trabalho.Services.Livros.ModelLivro;
 import com.bibliotecassa.trabalho.Services.Livros.ServiceLivro;
@@ -11,23 +12,27 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 @Service
+// definicao de class nome ServiceCarrinho
 public class ServiceCarrinho {
     private static final Logger logger = LoggerFactory.getLogger(ServiceCarrinho.class);
     private final CarrinhoItemRepository carrinhoItemRepository;
     private final ServiceLivro serviceLivro;
 
-    // objetivo
-    // service responsavel por adicionar remover e listar itens do carrinho
-    // persiste preco e metadados no momento da adicao
+    
+    
+    
 
     @Autowired
+
+
     public ServiceCarrinho(CarrinhoItemRepository carrinhoItemRepository, ServiceLivro serviceLivro) {
         this.carrinhoItemRepository = carrinhoItemRepository;
         this.serviceLivro = serviceLivro;
     }
 
+
     public void adicionarItemCarrinho(String idLivro, String idUsuario) {
-        // basic validation
+        
         if (idUsuario == null || idUsuario.isBlank()) {
             throw new IllegalArgumentException("idUsuario ausente");
         }
@@ -35,7 +40,7 @@ public class ServiceCarrinho {
             throw new IllegalArgumentException("idLivro ausente");
         }
 
-        // Busca o livro real pelo id para pegar o nome e o gênero
+        
         List<String> ids = new ArrayList<>();
         ids.add(idLivro);
         List<ModelLivro> livros = Collections.emptyList();
@@ -53,14 +58,14 @@ public class ServiceCarrinho {
             if (l.getTitulo() != null && !l.getTitulo().isBlank()) nomeLivro = l.getTitulo();
             if (l.getCategoria() != null) genero = l.getCategoria();
             if (l.getUrlCapa() != null) capaUrl = l.getUrlCapa();
-            // ensure capaUrl fits DB column size
+            
             if (capaUrl != null && capaUrl.length() > 1999) {
                 logger.warn("capaUrl muito longa ({} chars), truncando para 2000", capaUrl.length());
                 capaUrl = capaUrl.substring(0, 1999);
             }
         }
 
-        // Determine price/moeda from fetched livro (ServiceLivro already applies price fallback)
+        
         java.math.BigDecimal precoBD = null;
         String moeda = null;
         if (livros != null && !livros.isEmpty()) {
@@ -71,17 +76,17 @@ public class ServiceCarrinho {
             }
         }
 
-        // check for existing item to avoid duplicates
+        
         try {
             java.util.Optional<CarrinhoItem> existente = carrinhoItemRepository.findByUsuarioIdAndLivroId(idUsuario, idLivro);
             if (existente.isPresent()) {
-                // update existing record with fresh metadata (but preserve preco if already set)
+                
                 CarrinhoItem e = existente.get();
                 e.setNomeLivro(nomeLivro);
                 e.setCapaUrl(capaUrl);
                 e.setGeneroLivro(genero);
                 e.setDataAdicao(LocalDateTime.now());
-                // If existing has null price but we now have one, set it; otherwise keep stored price
+                
                 if (e.getPreco() == null && precoBD != null) {
                     e.setPreco(precoBD);
                     e.setMoeda(moeda);
@@ -95,14 +100,16 @@ public class ServiceCarrinho {
         }
 
         CarrinhoItem item = new CarrinhoItem(idUsuario, idLivro, nomeLivro, capaUrl, LocalDateTime.now(), genero, precoBD, moeda);
-        // Log for debugging: show what URL and price will be saved
+        
         logger.info("Adicionando item ao carrinho - usuario={}, livroId={}, nome='{}', capaUrl='{}', preco={}", idUsuario, idLivro, nomeLivro, capaUrl, precoBD);
         carrinhoItemRepository.save(item);
     }
 
+
     public List<CarrinhoItem> obterCarrinhoPorUsuario(String usuarioId) {
         return carrinhoItemRepository.findByUsuarioId(usuarioId);
     }
+
 
     public void removerItemCarrinho(String idLivro, String usuarioId) {
         List<CarrinhoItem> itens = carrinhoItemRepository.findByUsuarioId(usuarioId);
@@ -114,6 +121,7 @@ public class ServiceCarrinho {
         }
     }
 
+
     public void limparCarrinhoDoUsuario(String usuarioId) {
         if (usuarioId == null || usuarioId.isBlank()) return;
         List<CarrinhoItem> itens = carrinhoItemRepository.findByUsuarioId(usuarioId);
@@ -123,3 +131,7 @@ public class ServiceCarrinho {
         }
     }
 }
+
+
+
+

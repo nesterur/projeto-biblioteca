@@ -1,7 +1,6 @@
-/* base box sizing */
+﻿
 * { box-sizing: border-box; }
 
-/* Base page */
 body {
   background: #221a23;
   color: #222;
@@ -10,12 +9,11 @@ body {
   padding: 0;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative; /* needed for centering .navbar-center */
+  position: relative; 
   background: #8107d8;
   padding: 0 24px;
   height: 64px;
@@ -38,7 +36,6 @@ body {
 .nav-links a { color: #fff; text-decoration:none; font-weight:500; }
 .nav-links a.btn-meuslivros { background:#fff; color:#8107d8; padding:6px 12px; border-radius:8px; font-weight:600; }
 
-/* Site title link: make it look like the Meus Livros white contour/button */
 .site-title-link {
   background: #fff;
   color: #8107d8;
@@ -53,10 +50,6 @@ body {
   box-shadow: 0 4px 12px rgba(129,7,216,0.12);
 }
 
-/* categorias button (compact) */
-/* categorias button removed - reverted to original design */
-
-/* Header and search bar */
 .header {
   background: #221a23;
   padding: 32px 0 16px 0;
@@ -79,7 +72,6 @@ body {
 .search-bar i { color:#444; font-size:1.2em; }
 .search-bar .btn { background: #8107d8; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 1em; cursor: pointer; }
 
-/* Main books grid (dashboard) */
 .container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -111,9 +103,7 @@ body {
 .book-card:hover { box-shadow: 0 6px 24px rgba(119, 0, 255, 0.12); transform: translateY(-4px); }
 .btn-carrinho { background: #8107d8; color: #fff; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 1em; box-shadow: 0 1px 4px rgba(129,7,216,0.08); }
 .add-carrinho-form { position: absolute; top: 10px; right: 10px; }
-/* end of dashboard rules */
 
-/* Categories panel - placed to the right of the search bar */
 .categories-panel {
   display: inline-flex;
   align-items: center;
@@ -127,17 +117,17 @@ body {
   border: none;
   padding: 8px 10px;
   font-weight: 600;
-  color: #4a1a68; /* deep purple tone */
+  color: #4a1a68; 
   outline: none;
   cursor: pointer;
-  min-width: 160px; /* ensure the select shows the label instead of collapsing to a small dot */
+  min-width: 160px; 
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
 .categories-panel { position: relative; }
 .categories-panel::after {
-  /* small caret on the right of the select to indicate dropdown */
+  
   content: '\25BE';
   position: absolute;
   right: 12px;
@@ -153,20 +143,18 @@ body {
   .categories-panel { margin-right: 8px; }
 }
 
-/* Empty state message shown when no search has been made */
 .empty-state {
   max-width: 720px;
   margin: 18px auto 8px auto;
   padding: 14px 18px;
   border-radius: 12px;
-  background: transparent; /* don't create a white square inside rounded header */
+  background: transparent; 
   color: #cfcfcf;
   text-align: center;
   font-size: 1.05em;
 }
 .empty-state p { margin:0; }
 
-/* Pagination styling to match Meus Livros tone */
 .pagination {
   text-align: center;
   margin: 24px 0;
@@ -177,7 +165,7 @@ body {
   display: inline-block;
   margin: 0 6px;
   padding: 6px 10px;
-  color: #6a00c9; /* purple link color */
+  color: #6a00c9; 
   text-decoration: none;
   background: transparent;
   border-radius: 8px;
@@ -187,33 +175,29 @@ body {
   box-shadow: 0 4px 12px rgba(106,0,201,0.06);
 }
 .pagination span[th\:if] {
-  /* placeholder for template-expressed current page; ensure it appears as text */
+  
 }
 .pagination span[style] {
-  /* fallback rule */
+  
 }
 .pagination span[th\:if="${i == pagina}"] , .pagination .current-page {
   display: inline-block;
   margin: 0 6px;
   padding: 6px 10px;
-  background: #8107d8; /* strong purple */
+  background: #8107d8; 
   color: #fff;
   border-radius: 10px;
   font-weight: 700;
 }
 
-/* make previous/next links slightly subdued */
 .pagination a[th\:if="${pagina > 1}"], .pagination a[th\:if="${pagina < paginasExibir}"] {
   color: #4a1a68;
 }
 
-/* Safety: if a template accidentally includes the navbar fragment more than once,
-   show only the first one to avoid the page appearing duplicated visually. */
 .navbar:not(:first-of-type) {
   display: none !important;
 }
 
-/* Admin manage users specific styles */
 .result-table {
   border-collapse: collapse;
 }
@@ -238,7 +222,6 @@ body {
 }
 .result-table form { margin: 0; }
 
-/* small responsive adjustments for manage-users forms */
 @media (max-width: 900px) {
   .result-table thead { display: none; }
   .result-table, .result-table tbody, .result-table tr, .result-table td { display: block; width: 100%; }
@@ -246,4 +229,5 @@ body {
   .result-table td { padding-left: 50%; position: relative; }
   .result-table td::before { position: absolute; left: 12px; width: 45%; white-space: nowrap; content: attr(data-label); font-weight:700; color:#444; }
 }
+
 

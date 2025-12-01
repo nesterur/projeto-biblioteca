@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>`r`n<!-- descricao arquivo template comentarios adicionados sem pontuacao -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
@@ -7,13 +7,11 @@
 </head>
 <body>
 <div class="container checkout-success">
-    <!-- nota pagina de sucesso
-         resumo do pedido itens valores periodo instrucoes meus livros
-    -->
+    
     <h1>Aluguel confirmado</h1>
     <p th:if="${orderId}">Pedido ID: <strong th:text="${orderId}"></strong></p>
     <p th:if="${totalFormatado}">Total cobrado: <strong th:text="${totalFormatado}"></strong></p>
-    <!-- Show order-specific notice when order succeeded, otherwise display any existing message -->
+    
     <p th:if="${orderId}">Sua key aparecerá na aba "Meus Livros"</p>
     <p th:if="${orderId} == null and ${message}" th:text="${message}"></p>
 
@@ -47,3 +45,6 @@
 </div>
 </body>
 </html>
+
+
+
